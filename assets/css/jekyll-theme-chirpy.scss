@@ -1,0 +1,111 @@
+---
+---
+
+@use 'abstracts/variables' with (
+  $theme: '{{ site.theme_mode }}'
+);
+
+/* prettier-ignore */
+@use 'main
+{%- if jekyll.environment == 'production' -%}
+  .bundle
+{%- endif -%}
+';
+
+/* ===========================================================================
+   아래가 커스텀 영역입니다. (위 @use 3줄은 테마 본체를 불러오는 코드이니 건드리지 마세요)
+
+   색을 바꾸고 싶으면 아래 "색상" 블록의 HEX 값만 고치면 됩니다.
+   Chirpy 7.6은 테마 상태를 `data-bs-theme` 속성으로 관리합니다.
+   (인터넷의 옛 가이드에 나오는 `data-mode`로 쓰면 아무 효과가 없습니다)
+   =========================================================================== */
+
+/* ── 폰트 ──────────────────────────────────────────────────────────────────
+   웹폰트를 받지 않고 OS에 있는 한글 폰트를 우선 사용합니다 (로딩 0ms).
+   Pretendard가 설치된 환경이면 그걸 쓰고, 아니면 맑은 고딕/애플 SD 고딕으로 대체됩니다. */
+$font-kr:
+  'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+  'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', system-ui, sans-serif;
+
+$font-code:
+  'JetBrains Mono', 'D2Coding', ui-monospace, SFMono-Regular, Menlo, Consolas,
+  monospace;
+
+/* ── 색상 ──────────────────────────────────────────────────────────────────
+   ...-fade 는 같은 색의 40% 투명도 버전입니다 (뒤 두 자리 66 = 알파값). */
+$accent-light: #2f6f4e; /* 밝은 모드 포인트 색 (링크, 활성 메뉴) */
+$accent-light-fade: #2f6f4e66;
+$accent-dark: #7fc9a0; /* 어두운 모드 포인트 색 */
+$accent-dark-fade: #7fc9a066;
+
+/* 밝은 모드: 속성이 'light'이거나, 지정이 없고 시스템이 밝은 테마일 때 */
+:root[data-bs-theme='light'],
+:root:not([data-bs-theme]) {
+  --link-color: #{$accent-light};
+  --link-underline-color: #{$accent-light-fade};
+  --sidebar-active-color: #{$accent-light};
+  --checkbox-checked-color: #{$accent-light};
+}
+
+/* 어두운 모드 */
+:root[data-bs-theme='dark'] {
+  --link-color: #{$accent-dark};
+  --link-underline-color: #{$accent-dark-fade};
+  --sidebar-active-color: #{$accent-dark};
+  --checkbox-checked-color: #{$accent-dark};
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-bs-theme]) {
+    --link-color: #{$accent-dark};
+    --link-underline-color: #{$accent-dark-fade};
+    --sidebar-active-color: #{$accent-dark};
+    --checkbox-checked-color: #{$accent-dark};
+  }
+}
+
+/* ── 본문 타이포그래피 ─────────────────────────────────────────────────────
+   word-break: keep-all 이 한글 블로그에서 체감 차이가 가장 큽니다.
+   단어 중간에서 줄이 끊기는 걸 막아줍니다. */
+body {
+  font-family: $font-kr;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-kr;
+  word-break: keep-all;
+}
+
+.content {
+  line-height: 1.8;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+
+  /* 제목 위 여백을 조금 넓혀 글의 구획을 분명하게 */
+  h2 {
+    margin-top: 2.5rem;
+  }
+
+  h3 {
+    margin-top: 2rem;
+  }
+
+  /* 코드 블록은 줄 간격을 좁게 (가독성) */
+  pre,
+  code {
+    font-family: $font-code;
+    line-height: 1.5;
+    word-break: normal;
+  }
+}
+
+/* 사이드바 블로그 제목 */
+#sidebar .site-title {
+  font-family: $font-kr;
+  letter-spacing: -0.02em;
+}
