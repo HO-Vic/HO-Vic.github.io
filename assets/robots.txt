@@ -1,0 +1,12 @@
+---
+permalink: /robots.txt
+# The robots rules
+# 테마 기본값(assets/robots.txt)을 덮어쓴 파일입니다.
+---
+
+User-agent: *
+
+Disallow: /norobots/
+Disallow: /write/
+
+Sitemap: {{ '/sitemap.xml' | absolute_url }}
