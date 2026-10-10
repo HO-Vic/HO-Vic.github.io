@@ -1,0 +1,307 @@
+---
+layout: page
+title: 글쓰기
+permalink: /write/
+sitemap: false
+toc: false
+---
+
+<div
+  id="composer"
+  data-repo="HO-Vic/HO-Vic.github.io"
+  data-branch="main"
+  data-posts-dir="_posts"
+  data-img-dir="assets/img/posts"
+>
+  <!-- 1. 토큰 -->
+  <section class="cw-card" id="cw-auth">
+    <h2 class="cw-h">1. GitHub 토큰</h2>
+    <p class="cw-help">
+      이 페이지는 서버 없이 동작합니다. 발행 버튼을 누르면 <strong>내 브라우저에서 직접 GitHub에 커밋</strong>합니다.
+      그래서 쓰기 권한이 있는 토큰이 필요합니다.
+    </p>
+    <p class="cw-help">
+      <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">토큰 발급하기</a>
+      → Repository access는 <code>HO-Vic.github.io</code> 하나만, Permissions는 <code>Contents: Read and write</code>만 주세요.
+      만료일도 짧게 잡는 게 좋습니다.
+    </p>
+    <div class="cw-row">
+      <input type="password" id="cw-token" class="cw-input" placeholder="github_pat_... 또는 ghp_..." autocomplete="off" spellcheck="false">
+      <button type="button" id="cw-token-check" class="cw-btn">확인</button>
+    </div>
+    <label class="cw-check">
+      <input type="checkbox" id="cw-token-remember" checked>
+      이 브라우저에 토큰 저장 (localStorage)
+    </label>
+    <p class="cw-warn">
+      ⚠ 저장하면 이 브라우저를 쓰는 사람은 누구나 발행할 수 있습니다. 공용·공유 PC에서는 저장하지 마세요.
+      토큰이 유출된 것 같으면 GitHub 설정에서 바로 revoke하면 됩니다.
+    </p>
+    <div class="cw-row">
+      <span id="cw-auth-status" class="cw-status">미확인</span>
+      <button type="button" id="cw-token-clear" class="cw-btn cw-btn-quiet">저장된 토큰 삭제</button>
+    </div>
+  </section>
+
+  <!-- 2. 글 정보 -->
+  <section class="cw-card">
+    <h2 class="cw-h">2. 글 정보</h2>
+
+    <label class="cw-label" for="cw-title">제목 <span class="cw-req">*</span></label>
+    <input type="text" id="cw-title" class="cw-input" placeholder="글 제목">
+
+    <label class="cw-label" for="cw-slug">
+      파일명 슬러그 <span class="cw-req">*</span>
+      <span class="cw-hint">URL이 됩니다. 영문·숫자·하이픈 권장</span>
+    </label>
+    <input type="text" id="cw-slug" class="cw-input" placeholder="my-first-post">
+    <p class="cw-help" id="cw-filename-preview">파일: <code>_posts/…</code></p>
+
+    <label class="cw-label" for="cw-desc">한 줄 요약 <span class="cw-hint">목록·검색 결과에 보임</span></label>
+    <input type="text" id="cw-desc" class="cw-input" placeholder="이 글이 무엇에 대한 글인지">
+
+    <div class="cw-grid">
+      <div>
+        <label class="cw-label" for="cw-date">작성 일시</label>
+        <input type="datetime-local" id="cw-date" class="cw-input">
+        <p class="cw-help">미래 날짜로 두면 글이 보이지 않습니다.</p>
+      </div>
+      <div>
+        <label class="cw-label" for="cw-cat">카테고리 <span class="cw-hint">쉼표로 최대 2개</span></label>
+        <input type="text" id="cw-cat" class="cw-input" placeholder="개발, 트러블슈팅">
+        <label class="cw-label" for="cw-tags">태그 <span class="cw-hint">쉼표 구분</span></label>
+        <input type="text" id="cw-tags" class="cw-input" placeholder="jekyll, css">
+      </div>
+    </div>
+
+    <div class="cw-opts">
+      <label class="cw-check"><input type="checkbox" id="cw-pin"> 홈 상단 고정 (pin)</label>
+      <label class="cw-check"><input type="checkbox" id="cw-math"> 수식 사용 (math)</label>
+      <label class="cw-check"><input type="checkbox" id="cw-mermaid"> 다이어그램 사용 (mermaid)</label>
+      <label class="cw-check"><input type="checkbox" id="cw-comments" checked> 댓글 허용</label>
+    </div>
+  </section>
+
+  <!-- 3. 본문 -->
+  <section class="cw-card">
+    <h2 class="cw-h">3. 본문</h2>
+    <div class="cw-toolbar">
+      <button type="button" class="cw-btn cw-btn-sm" data-wrap="**" data-placeholder="굵게">B</button>
+      <button type="button" class="cw-btn cw-btn-sm" data-wrap="_" data-placeholder="기울임"><em>I</em></button>
+      <button type="button" class="cw-btn cw-btn-sm" data-wrap="`" data-placeholder="코드">&lt;/&gt;</button>
+      <button type="button" class="cw-btn cw-btn-sm" data-prefix="## " data-placeholder="소제목">H2</button>
+      <button type="button" class="cw-btn cw-btn-sm" data-prefix="- " data-placeholder="항목">목록</button>
+      <button type="button" class="cw-btn cw-btn-sm" data-insert="&gt; 내용\n{: .prompt-tip }\n">팁박스</button>
+      <button type="button" class="cw-btn cw-btn-sm" data-insert="```\n\n```\n">코드블록</button>
+      <button type="button" class="cw-btn cw-btn-sm" id="cw-img-btn">이미지 업로드</button>
+      <input type="file" id="cw-img-input" accept="image/*" multiple hidden>
+      <button type="button" class="cw-btn cw-btn-sm cw-right" id="cw-preview-toggle">미리보기</button>
+    </div>
+    <textarea id="cw-body" class="cw-textarea" rows="20" placeholder="마크다운으로 작성하세요.&#10;&#10;이미지는 복사해서 붙여넣거나(Ctrl+V) 여기로 드래그하면 자동 업로드됩니다."></textarea>
+    <div id="cw-preview" class="cw-preview content" hidden></div>
+    <p class="cw-help" id="cw-draft-status">초안은 이 브라우저에 자동 저장됩니다.</p>
+  </section>
+
+  <!-- 4. 발행 -->
+  <section class="cw-card">
+    <h2 class="cw-h">4. 발행</h2>
+    <label class="cw-label" for="cw-message">커밋 메시지</label>
+    <input type="text" id="cw-message" class="cw-input" placeholder="(비우면 자동 생성)">
+    <div class="cw-row cw-publish-row">
+      <button type="button" id="cw-publish" class="cw-btn cw-btn-primary">발행하기</button>
+      <button type="button" id="cw-draft-clear" class="cw-btn cw-btn-quiet">초안 비우기</button>
+    </div>
+    <div id="cw-result" class="cw-result" hidden></div>
+    <p class="cw-help">
+      발행하면 <code>main</code>에 바로 커밋됩니다. GitHub Actions 빌드가 끝나는 1~2분 뒤 사이트에 반영됩니다.
+    </p>
+  </section>
+</div>
+
+<style>
+  #composer {
+    --cw-gap: 1rem;
+  }
+  .cw-card {
+    border: 1px solid var(--main-border-color);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    background: var(--card-bg, transparent);
+  }
+  .cw-h {
+    margin: 0 0 0.75rem;
+    font-size: 1.1rem;
+    border: 0;
+  }
+  .cw-label {
+    display: block;
+    margin: 0.9rem 0 0.3rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .cw-hint,
+  .cw-help {
+    font-weight: 400;
+    font-size: 0.8rem;
+    color: var(--text-muted-color);
+  }
+  .cw-help {
+    margin: 0.35rem 0 0;
+    line-height: 1.6;
+  }
+  .cw-req {
+    color: #d9534f;
+  }
+  .cw-input,
+  .cw-textarea {
+    width: 100%;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--main-border-color);
+    border-radius: 6px;
+    background: var(--main-bg);
+    color: var(--text-color);
+    font-size: 0.95rem;
+    font-family: inherit;
+  }
+  .cw-textarea {
+    font-family: var(--cw-mono, ui-monospace, Consolas, monospace);
+    line-height: 1.7;
+    resize: vertical;
+    min-height: 22rem;
+  }
+  .cw-input:focus,
+  .cw-textarea:focus {
+    outline: 2px solid var(--link-color);
+    outline-offset: -1px;
+  }
+  .cw-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--cw-gap);
+  }
+  .cw-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+  .cw-publish-row {
+    margin-top: 1rem;
+  }
+  .cw-row .cw-input {
+    flex: 1 1 18rem;
+  }
+  .cw-opts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+    margin-top: 1rem;
+  }
+  .cw-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    margin: 0.6rem 0 0;
+    cursor: pointer;
+  }
+  .cw-check input {
+    margin: 0;
+  }
+  .cw-btn {
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--btn-border-color, var(--main-border-color));
+    border-radius: 6px;
+    background: var(--button-bg);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  .cw-btn:hover:not(:disabled) {
+    border-color: var(--link-color);
+    color: var(--link-color);
+  }
+  .cw-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .cw-btn-sm {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.82rem;
+  }
+  .cw-btn-primary {
+    background: var(--link-color);
+    border-color: var(--link-color);
+    color: #fff;
+    font-weight: 600;
+    padding: 0.55rem 1.4rem;
+  }
+  .cw-btn-primary:hover:not(:disabled) {
+    color: #fff;
+    filter: brightness(1.1);
+  }
+  .cw-btn-quiet {
+    color: var(--text-muted-color);
+  }
+  .cw-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin-bottom: 0.5rem;
+  }
+  .cw-toolbar .cw-right {
+    margin-left: auto;
+  }
+  .cw-status {
+    font-size: 0.85rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--main-border-color);
+    color: var(--text-muted-color);
+  }
+  .cw-status.ok {
+    color: #2f6f4e;
+    border-color: #2f6f4e;
+  }
+  .cw-status.bad {
+    color: #d9534f;
+    border-color: #d9534f;
+  }
+  .cw-warn {
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--text-muted-color);
+    margin: 0.6rem 0 0;
+  }
+  .cw-preview {
+    border: 1px dashed var(--main-border-color);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    margin-top: 0.5rem;
+  }
+  .cw-preview > :first-child {
+    margin-top: 0;
+  }
+  .cw-result {
+    margin-top: 1rem;
+    padding: 0.85rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--main-border-color);
+    font-size: 0.9rem;
+    line-height: 1.8;
+  }
+  .cw-result.ok {
+    border-color: #2f6f4e;
+  }
+  .cw-result.bad {
+    border-color: #d9534f;
+  }
+  .cw-textarea.cw-dragover {
+    outline: 2px dashed var(--link-color);
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js" defer></script>
+<script src="{{ '/assets/js/write.js' | relative_url }}" defer></script>
